@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlotCord - Customer Feedbacks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #09090b;
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: transparent;
+            padding: 30px 40px 20px 40px;
+            z-index: 100;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            padding: 20px 40px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        header.scrolled .header-content {
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(156, 163, 175, 0.1);
+            border-radius: 16px;
+            padding: 15px 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            gap: 20px;
+        }
+
+        .profile-pic {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav a {
+            color: rgba(156, 163, 175, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 200;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: rgba(209, 213, 219, 1);
+        }
+
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        @property --percentage {
+            syntax: '<percentage>';
+            initial-value: 10%;
+            inherits: false;
+        }
+
+        .discord-btn {
+            position: relative;
+            padding: 8px 20px;
+            color: rgba(156, 163, 175, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 200;
+            border-radius: 8px;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            transition: color 0.3s ease, --percentage 1.2s ease;
+            background: linear-gradient(#09090b, #09090b) padding-box,
+                        conic-gradient(from var(--angle), 
+                                       transparent, 
+                                       rgba(255, 255, 255, 0.8) var(--percentage), 
+                                       transparent calc(var(--percentage) + 10%)) border-box;
+            border: 2px solid transparent;
+            animation: rotate-border 3s linear infinite;
+        }
+
+        .discord-btn:hover {
+            color: rgba(209, 213, 219, 1);
+            --percentage: 100%;
+        }
+
+        @keyframes rotate-border {
+            to {
+                --angle: 360deg;
+            }
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: rgba(156, 163, 175, 0.9);
+            margin: 4px 0;
+            transition: 0.3s ease-in-out;
+        }
+
+        .burger-menu.open span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .burger-menu.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* FEEDBACKS SECTION */
+        #feedbacks {
+            position: relative;
+            padding: 180px 40px 100px;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feedback-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .feedback-title {
+            font-size: 64px;
+            font-weight: 700;
+            background: linear-gradient(to bottom, #ffffff, rgba(107, 114, 128, 0.9));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .feedback-subtitle {
+            font-size: 16px;
+            color: rgba(156, 163, 175, 0.9);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: rgba(156, 163, 175, 0.7);
+            font-weight: 300;
+        }
+
+        /* LOADING STATE */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            gap: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(156, 163, 175, 0.2);
+            border-top-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 15px;
+            color: rgba(156, 163, 175, 0.8);
+        }
+
+        /* FEEDBACKS GRID */
+        .feedbacks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .feedback-card {
+            background: rgba(20, 20, 23, 0.5);
+            border: 1px solid rgba(156, 163, 175, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-card:hover {
+            border-color: rgba(156, 163, 175, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid rgba(156, 163, 175, 0.3);
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 3px;
+        }
+
+        .feedback-date {
+            font-size: 12px;
+            color: rgba(156, 163, 175, 0.6);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            color: #fbbf24;
+            font-size: 16px;
+        }
+
+        .star.empty {
+            color: rgba(156, 163, 175, 0.3);
+        }
+
+        .feedback-message {
+            font-size: 14px;
+            color: rgba(156, 163, 175, 0.9);
+            line-height: 1.7;
+            margin-top: 15px;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: rgb(74, 222, 128);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .no-feedbacks {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .no-feedbacks-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .no-feedbacks-text {
+            font-size: 18px;
+            color: rgba(156, 163, 175, 0.7);
+            font-weight: 300;
+        }
+
+        /* ERROR STATE */
+        .error-container {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .error-text {
+            font-size: 15px;
+            color: rgba(248, 113, 113, 0.9);
+            line-height: 1.6;
+        }
+
+        /* GLOWS */
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            width: 700px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(59, 130, 246, 0.8), transparent);
+            top: 20%;
+            left: 10%;
+            animation: float-1 20s ease-in-out infinite;
+        }
+
+        .glow-2 {
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(168, 85, 247, 0.8), transparent);
+            top: 60%;
+            right: 15%;
+            animation: float-2 25s ease-in-out infinite;
+        }
+
+        @keyframes float-1 {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            33% {
+                transform: translate(100px, -80px);
+            }
+            66% {
+                transform: translate(-50px, 100px);
+            }
+        }
+
+        @keyframes float-2 {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            33% {
+                transform: translate(-120px, 90px);
+            }
+            66% {
+                transform: translate(80px, -70px);
+            }
+        }
+
+        /* PARTICLES */
+        #particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.65);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.65;
+            }
+            90% {
+                opacity: 0.65;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(15, 15, 18, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: right 0.4s ease;
+                border-left: 1px solid rgba(156, 163, 175, 0.15);
+            }
+
+            nav.open {
+                right: 0;
+            }
+
+            nav a {
+                font-size: 18px;
+            }
+
+            .discord-btn {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            #feedbacks {
+                padding: 140px 20px 80px;
+            }
+
+            .feedback-title {
+                font-size: 42px;
+            }
+
+            .feedbacks-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <header id="header">
+        <div class="header-content">
+            <img src="ezgif-56d9db375c589caf.gif" alt="Profile" class="profile-pic">
+            
+            <nav id="nav">
+                <a href="index.html#features">Features</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="terms.html">Terms</a>
+                <a href="feedback.html">Feedbacks</a>
+            </nav>
+
+            <a href="#discord" class="discord-btn">Join Discord</a>
+
+            <div class="burger-menu" id="burger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <section id="feedbacks">
+        <div class="feedback-header">
+            <h1 class="feedback-title">Customer Feedbacks</h1>
+            <p class="feedback-subtitle">
+                See what our clients have to say about SlotCord services
+            </p>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-reviews">0</span>
+                    <span class="stat-label">Total Reviews</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="avg-rating">0.0</span>
+                    <span class="stat-label">Average Rating</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="satisfied-clients">0%</span>
+                    <span class="stat-label">Satisfied Clients</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-container" id="loading">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading feedbacks...</p>
+        </div>
+
+        <!-- Feedbacks Grid -->
+        <div class="feedbacks-grid" id="feedbacks-grid" style="display: none;">
+            <!-- Feedbacks will be dynamically inserted here -->
+        </div>
+
+        <!-- No Feedbacks State -->
+        <div class="no-feedbacks" id="no-feedbacks" style="display: none;">
+            <div class="no-feedbacks-icon">💬</div>
+            <p class="no-feedbacks-text">No feedbacks yet. Be the first to leave a review!</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-container" id="error-container" style="display: none;">
+            <p class="error-text">Unable to load feedbacks. Please try again later.</p>
+        </div>
+    </section>
+
+    <div id="particles-container"></div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - REMPLACE PAR TES VRAIES VALEURS
+        // ============================================
+        const CONFIG = {
+            // Option 1: Utiliser un endpoint API depuis ton bot Discord
+            apiEndpoint: 'https://ton-bot-api.com/api/feedbacks',
+            
+            // Option 2: Utiliser Discord API directement (nécessite un token bot côté serveur)
+            // Ne JAMAIS exposer ton token bot dans le frontend!
+            useDirectDiscordAPI: false,
+            channelId: 'TON_CHANNEL_ID_ICI',
+        };
+
+        // ============================================
+        // FETCH FEEDBACKS FROM DISCORD
+        // ============================================
+        async function fetchFeedbacks() {
+            try {
+                // Tu devras créer un endpoint API sur ton bot Discord qui retourne les feedbacks
+                // Format attendu: [{ username, avatar, rating, message, timestamp, verified }]
+                
+                const response = await fetch(CONFIG.apiEndpoint);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch feedbacks');
+                }
+
+                const feedbacks = await response.json();
+                displayFeedbacks(feedbacks);
+                updateStats(feedbacks);
+                
+            } catch (error) {
+                console.error('Error fetching feedbacks:', error);
+                showError();
+            }
+        }
+
+        // ============================================
+        // DISPLAY FEEDBACKS
+        // ============================================
+        function displayFeedbacks(feedbacks) {
+            const loadingContainer = document.getElementById('loading');
+            const feedbacksGrid = document.getElementById('feedbacks-grid');
+            const noFeedbacks = document.getElementById('no-feedbacks');
+
+            loadingContainer.style.display = 'none';
+
+            if (feedbacks.length === 0) {
+                noFeedbacks.style.display = 'block';
+                return;
+            }
+
+            feedbacksGrid.style.display = 'grid';
+            feedbacksGrid.innerHTML = '';
+
+            feedbacks.forEach((feedback, index) => {
+                const card = createFeedbackCard(feedback, index);
+                feedbacksGrid.appendChild(card);
+            });
+        }
+
+        // ============================================
+        // CREATE FEEDBACK CARD
+        // ============================================
+        function createFeedbackCard(feedback, index) {
+            const card = document.createElement('div');
+            card.className = 'feedback-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            const stars = generateStars(feedback.rating);
+            const formattedDate = formatDate(feedback.timestamp);
+
+            card.innerHTML = `
+                <div class="feedback-header-info">
+                    <img src="${feedback.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" 
+                         alt="${feedback.username}" 
+                         class="user-avatar"
+                         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                    <div class="user-info">
+                        <div class="user-name">${escapeHtml(feedback.username)}</div>
+                        <div class="feedback-date">${formattedDate}</div>
+                    </div>
+                </div>
+                <div class="rating-stars">
+                    ${stars}
+                </div>
+                <p class="feedback-message">${escapeHtml(feedback.message)}</p>
+                ${feedback.verified ? '<span class="verified-badge">✓ Verified Purchase</span>' : ''}
+            `;
+
+            return card;
+        }
+
+        // ============================================
+        // GENERATE STAR RATING
+        // ============================================
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<span class="star ${i <= rating ? '' : 'empty'}">★</span>`;
+            }
+            return stars;
+        }
+
+        // ============================================
+        // UPDATE STATISTICS
+        // ============================================
+        function updateStats(feedbacks) {
+            const totalReviews = feedbacks.length;
+            const avgRating = feedbacks.reduce((sum, f) => sum + f.rating, 0) / totalReviews;
+            const satisfiedClients = Math.round((feedbacks.filter(f => f.rating >= 4).length / totalReviews) * 100);
+
+            document.getElementById('total-reviews').textContent = totalReviews;
+            document.getElementById('avg-rating').textContent = avgRating.toFixed(1);
+            document.getElementById('satisfied-clients').textContent = satisfiedClients + '%';
+        }
+
+        // ============================================
+        // FORMAT DATE
+        // ============================================
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // ============================================
+        // ESCAPE HTML
+        // ============================================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // SHOW ERROR
+        // ============================================
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-container').style.display = 'block';
+        }
+
+        // ============================================
+        // EXEMPLE DE DONNÉES (POUR TESTS)
+        // ============================================
+        function loadMockData() {
+            const mockFeedbacks = [
+                {
+                    username: 'Alex_Pro',
+                    avatar: 'https://cdn.discordapp.com/embed/avatars/1.png',
+                    rating: 5,
+                    message: 'Excellent service! My server visibility increased by 300% in just 2 weeks. Highly recommend SlotCord!',
+                    timestamp: Date.now() - 86400000 * 2,
+                    verified: true
+                },
+                {
+                    username: 'Gaming_Master',
+                    avatar: 'https://cdn.discordapp.com/embed/avatars/2.png',
+                    rating: 5,
+                    message: 'Best investment for my gaming community. The scheduled pings work perfectly and the support team is amazing.',
+                    timestamp: Date.now() - 86400000 * 5,
+                    verified: true
+                },
+                {
+                    username: 'CommunityBuilder',
+                    avatar: 'https://cdn.discordapp.com/embed/avatars/3.png',
+                    rating: 4,
+                    message: 'Great service overall. Saw significant growth in my server. Would love to see more customization options.',
+                    timestamp: Date.now() - 86400000 * 7,
+                    verified: false
+                },
+                {
+                    username: 'DiscordKing',
+                    avatar: 'https://cdn.discordapp.com/embed/avatars/4.png',
+                    rating: 5,
+                    message: 'Been using SlotCord for 3 months now. Absolutely worth every euro. My server went from 500 to 3000 members!',
+                    timestamp: Date.now() - 86400000 * 10,
+                    verified: true
+                },
+                {
+                    username: 'StreamerLife',
+                    avatar: 'https://cdn.discordapp.com/embed/avatars/5.png',
+                    rating: 5,
+                    message: 'Perfect for content creators! The visibility boost helped me grow my streaming community massively.',
+                    timestamp: Date.now() - 86400000 * 15,
+                    verified: true
+                },
+                {
+                    username: 'NFT_Trader',
+                    avatar: 'https://cdn.discordapp.com/embed/avatars/0.png',
+                    rating: 4,
+                    message: 'Solid service for NFT communities. Good ROI and reliable delivery.',
+                    timestamp: Date.now() - 86400000 * 20,
+                    verified: false
+                }
+            ];
+
+            displayFeedbacks(mockFeedbacks);
+            updateStats(mockFeedbacks);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        window.addEventListener('DOMContentLoaded', () => {
+            // POUR LES TESTS: Utilise les données mock
+            setTimeout(() => {
+                loadMockData();
+            }, 1500);
+
+            // EN PRODUCTION: Décommente cette ligne et commente loadMockData()
+            // fetchFeedbacks();
+        });
+
+        // ============================================
+        // HEADER SCROLL EFFECT
+        // ============================================
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ============================================
+        // BURGER MENU
+        // ============================================
+        function toggleMenu() {
+            const nav = document.getElementById('nav');
+            const burger = document.getElementById('burger');
+            nav.classList.toggle('open');
+            burger.classList.toggle('open');
+        }
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('nav');
+                const burger = document.getElementById('burger');
+                nav.classList.remove('open');
+                burger.classList.remove('open');
+            });
+        });
+
+        // ============================================
+        // PARTICLES ANIMATION
+        // ============================================
+        const particlesContainer = document.getElementById('particles-container');
+        const numberOfParticles = 60;
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const size = Math.random() * 3 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.bottom = '-10px';
+
+            const drift = (Math.random() - 0.5) * 100;
+            particle.style.setProperty('--drift', `${drift}px`);
+
+            const duration = Math.random() * 5 + 3;
+            particle.style.animation = `float-up ${duration}s linear forwards`;
+
+            particlesContainer.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, duration * 1000);
+        }
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            setTimeout(() => {
+                createParticle();
+            }, Math.random() * 5000);
+        }
+
+        setInterval(() => {
+            createParticle();
+        }, 500);
+    </script>
+</body>
+</html>

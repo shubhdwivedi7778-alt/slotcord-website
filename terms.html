@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlotCord - Terms of Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #09090b;
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: transparent;
+            padding: 30px 40px 20px 40px;
+            z-index: 100;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            padding: 20px 40px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        header.scrolled .header-content {
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(156, 163, 175, 0.1);
+            border-radius: 16px;
+            padding: 15px 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            gap: 20px;
+        }
+
+        .profile-pic {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav a {
+            color: rgba(156, 163, 175, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 200;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: rgba(209, 213, 219, 1);
+        }
+
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        @property --percentage {
+            syntax: '<percentage>';
+            initial-value: 10%;
+            inherits: false;
+        }
+
+        .discord-btn {
+            position: relative;
+            padding: 8px 20px;
+            color: rgba(156, 163, 175, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 200;
+            border-radius: 8px;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            transition: color 0.3s ease, --percentage 1.2s ease;
+            background: linear-gradient(#09090b, #09090b) padding-box,
+                        conic-gradient(from var(--angle), 
+                                       transparent, 
+                                       rgba(255, 255, 255, 0.8) var(--percentage), 
+                                       transparent calc(var(--percentage) + 10%)) border-box;
+            border: 2px solid transparent;
+            animation: rotate-border 3s linear infinite;
+        }
+
+        .discord-btn:hover {
+            color: rgba(209, 213, 219, 1);
+            --percentage: 100%;
+        }
+
+        @keyframes rotate-border {
+            to {
+                --angle: 360deg;
+            }
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: rgba(156, 163, 175, 0.9);
+            margin: 4px 0;
+            transition: 0.3s ease-in-out;
+        }
+
+        .burger-menu.open span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .burger-menu.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* TERMS SECTION */
+        #terms {
+            position: relative;
+            padding: 180px 40px 100px;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .terms-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .terms-title {
+            font-size: 64px;
+            font-weight: 700;
+            background: linear-gradient(to bottom, #ffffff, rgba(107, 114, 128, 0.9));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .terms-subtitle {
+            font-size: 16px;
+            color: rgba(156, 163, 175, 0.9);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .last-updated {
+            font-size: 13px;
+            color: rgba(156, 163, 175, 0.7);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .terms-content {
+            background: rgba(20, 20, 23, 0.4);
+            border: 1px solid rgba(156, 163, 175, 0.12);
+            border-radius: 20px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .terms-section {
+            margin-bottom: 40px;
+        }
+
+        .terms-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(156, 163, 175, 0.2);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .section-text {
+            font-size: 15px;
+            color: rgba(156, 163, 175, 0.9);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .section-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .terms-list {
+            list-style: none;
+            margin: 15px 0;
+            padding-left: 0;
+        }
+
+        .terms-list li {
+            font-size: 15px;
+            color: rgba(156, 163, 175, 0.9);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .terms-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: rgba(156, 163, 175, 0.6);
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight-box p {
+            font-size: 14px;
+            color: rgba(156, 163, 175, 0.95);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .contact-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(156, 163, 175, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .contact-box h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .contact-box p {
+            font-size: 14px;
+            color: rgba(156, 163, 175, 0.85);
+            margin-bottom: 20px;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 10px 28px;
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            border-radius: 8px;
+            border: 1px solid rgba(156, 163, 175, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(156, 163, 175, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* GLOWS */
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            width: 700px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(59, 130, 246, 0.8), transparent);
+            top: 20%;
+            left: 10%;
+            animation: float-1 20s ease-in-out infinite;
+        }
+
+        .glow-2 {
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(168, 85, 247, 0.8), transparent);
+            top: 60%;
+            right: 15%;
+            animation: float-2 25s ease-in-out infinite;
+        }
+
+        @keyframes float-1 {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            33% {
+                transform: translate(100px, -80px);
+            }
+            66% {
+                transform: translate(-50px, 100px);
+            }
+        }
+
+        @keyframes float-2 {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            33% {
+                transform: translate(-120px, 90px);
+            }
+            66% {
+                transform: translate(80px, -70px);
+            }
+        }
+
+        /* PARTICLES */
+        #particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.65);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.65;
+            }
+            90% {
+                opacity: 0.65;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(15, 15, 18, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: right 0.4s ease;
+                border-left: 1px solid rgba(156, 163, 175, 0.15);
+            }
+
+            nav.open {
+                right: 0;
+            }
+
+            nav a {
+                font-size: 18px;
+            }
+
+            .discord-btn {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            #terms {
+                padding: 140px 20px 80px;
+            }
+
+            .terms-title {
+                font-size: 42px;
+            }
+
+            .terms-content {
+                padding: 30px 25px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .section-text,
+            .terms-list li {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <header id="header">
+        <div class="header-content">
+            <img src="ezgif-56d9db375c589caf.gif" alt="Profile" class="profile-pic">
+            
+            <nav id="nav">
+                <a href="index.html#features">Features</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="terms.html">Terms</a>
+                <a href="feedback.html">Feedbacks</a>
+            </nav>
+
+            <a href="#discord" class="discord-btn">Join Discord</a>
+
+            <div class="burger-menu" id="burger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <section id="terms">
+        <div class="terms-header">
+            <h1 class="terms-title">Terms of Service</h1>
+            <p class="terms-subtitle">
+                Please read these terms carefully before using SlotCord services
+            </p>
+            <p class="last-updated">Last updated: November 19, 2025</p>
+        </div>
+
+        <div class="terms-content">
+            <!-- Section 1 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">1</span>
+                    Acceptance of Terms
+                </h2>
+                <p class="section-text">
+                    By accessing or using SlotCord services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services. We reserve the right to modify these terms at any time, and your continued use constitutes acceptance of those changes.
+                </p>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    Service Description
+                </h2>
+                <p class="section-text">
+                    SlotCord provides premium visibility solutions for Discord servers, including but not limited to:
+                </p>
+                <ul class="terms-list">
+                    <li>Scheduled ping services (@here and @everyone)</li>
+                    <li>Server promotion and visibility optimization</li>
+                    <li>Brand exposure enhancement services</li>
+                    <li>Custom slot packages with varying durations</li>
+                </ul>
+                <p class="section-text">
+                    All services are provided "as is" and are subject to availability. We strive to maintain 99% uptime but cannot guarantee uninterrupted service.
+                </p>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">3</span>
+                    Payment and Pricing
+                </h2>
+                <p class="section-text">
+                    All prices are listed in Euros (€) and are subject to change without prior notice. Payment must be completed before service activation. We accept various payment methods as displayed on our platform.
+                </p>
+                <div class="highlight-box">
+                    <p>
+                        <strong>Important:</strong> All sales are final. Once a service has been activated, no refunds will be issued except in cases where we fail to deliver the purchased service as described.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">4</span>
+                    User Responsibilities
+                </h2>
+                <p class="section-text">
+                    When using SlotCord services, you agree to:
+                </p>
+                <ul class="terms-list">
+                    <li>Provide accurate and complete information during purchase</li>
+                    <li>Not use our services for illegal, harmful, or abusive purposes</li>
+                    <li>Comply with Discord's Terms of Service and Community Guidelines</li>
+                    <li>Not attempt to resell or redistribute our services without authorization</li>
+                    <li>Maintain the security of your account credentials</li>
+                </ul>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">5</span>
+                    Refund Policy
+                </h2>
+                <p class="section-text">
+                    Refunds are only available under the following circumstances:
+                </p>
+                <ul class="terms-list">
+                    <li>We fail to deliver the service within 48 hours of purchase</li>
+                    <li>Technical issues on our end prevent service delivery</li>
+                    <li>The service provided does not match the purchased description</li>
+                </ul>
+                <p class="section-text">
+                    Refund requests must be submitted within 7 days of purchase through our support system. We do not offer refunds for change of mind, Discord server closures, or violations of Discord's Terms of Service.
+                </p>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">6</span>
+                    Service Termination
+                </h2>
+                <p class="section-text">
+                    We reserve the right to suspend or terminate services immediately if:
+                </p>
+                <ul class="terms-list">
+                    <li>You violate these Terms of Service</li>
+                    <li>Your content violates Discord's Terms of Service</li>
+                    <li>You engage in fraudulent or abusive behavior</li>
+                    <li>Your server promotes illegal activities or hate speech</li>
+                </ul>
+                <p class="section-text">
+                    No refunds will be issued for services terminated due to violations.
+                </p>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">7</span>
+                    Limitation of Liability
+                </h2>
+                <p class="section-text">
+                    SlotCord shall not be liable for any indirect, incidental, special, or consequential damages resulting from the use or inability to use our services. Our total liability is limited to the amount paid for the specific service in question.
+                </p>
+                <p class="section-text">
+                    We are not responsible for Discord policy changes, server bans, or any actions taken by Discord Inc. against your server.
+                </p>
+            </div>
+
+            <!-- Section 8 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">8</span>
+                    Privacy and Data Protection
+                </h2>
+                <p class="section-text">
+                    We collect and process personal data in accordance with our Privacy Policy and GDPR regulations. By using our services, you consent to such processing and warrant that all data provided is accurate.
+                </p>
+                <p class="section-text">
+                    We do not share your personal information with third parties except as required for service delivery or legal compliance.
+                </p>
+            </div>
+
+            <!-- Section 9 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">9</span>
+                    Intellectual Property
+                </h2>
+                <p class="section-text">
+                    All content, branding, logos, and materials on SlotCord are protected by copyright and intellectual property laws. You may not reproduce, distribute, or create derivative works without explicit written permission.
+                </p>
+            </div>
+
+            <!-- Section 10 -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">10</span>
+                    Changes to Terms
+                </h2>
+                <p class="section-text">
+                    We reserve the right to update these Terms of Service at any time. Significant changes will be communicated via our Discord server or email. Continued use of our services after changes constitutes acceptance of the revised terms.
+                </p>
+            </div>
+
+            <!-- Contact Box -->
+            <div class="contact-box">
+                <h3>Questions About Our Terms?</h3>
+                <p>If you have any questions or concerns about these terms, our team is here to help.</p>
+                <a href="#discord" class="contact-btn">Contact Support</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="particles-container"></div>
+
+    <script>
+        // SCROLL EFFECT FOR HEADER
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // BURGER MENU
+        function toggleMenu() {
+            const nav = document.getElementById('nav');
+            const burger = document.getElementById('burger');
+            nav.classList.toggle('open');
+            burger.classList.toggle('open');
+        }
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const nav = document.getElementById('nav');
+                const burger = document.getElementById('burger');
+                nav.classList.remove('open');
+                burger.classList.remove('open');
+            });
+        });
+
+        // PARTICLES
+        const particlesContainer = document.getElementById('particles-container');
+        const numberOfParticles = 60;
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const size = Math.random() * 3 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.bottom = '-10px';
+
+            const drift = (Math.random() - 0.5) * 100;
+            particle.style.setProperty('--drift', `${drift}px`);
+
+            const duration = Math.random() * 5 + 3;
+            particle.style.animation = `float-up ${duration}s linear forwards`;
+
+            particlesContainer.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, duration * 1000);
+        }
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            setTimeout(() => {
+                createParticle();
+            }, Math.random() * 5000);
+        }
+
+        setInterval(() => {
+            createParticle();
+        }, 500);
+    </script>
+</body>
+</html>
